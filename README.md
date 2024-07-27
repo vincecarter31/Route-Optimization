@@ -1,0 +1,17 @@
+Schedule and Route Optimization for Rudi’s Bakery
+
+Rudi's Bakery faces the challenge of delivering fresh bread to 52 stores in Colorado while minimizing product spoilage. The bakery has two drivers responsible for these deliveries, with specific constraints to ensure efficiency and product freshness. Each store needs to be restocked at least three times a week, while Costco requires five weekly deliveries due to its high demand. Additionally, the bakery does not operate on Wednesdays or Sundays, limiting delivery days to five per week. Another critical constraint is that each store must be exclusively assigned to one driver to avoid any overlap or confusion; a store receiving deliveries from Driver A cannot receive any from Driver B, and vice versa. This problem requires a careful balance between meeting the delivery frequency requirements and optimizing the routes to minimize travel time and costs.
+To create the first optimized delivery route for Rudi's Bakery, I used a custom function called nearest_neighbor_with_time_limit that leverages the time matrix generated from the OSRM API. The time matrix provided the travel times between all pairs of store locations, enabling a precise calculation of travel durations.
+The function begins by initializing variables to track visited locations and the route, starting with the depot. It iteratively selects the nearest unvisited location, ensuring that the predicted total travel time, including service time at each stop, does not exceed the specified maximum time of 8 hours. A critical aspect of this process is the requirement to visit Costco at least once per route, which the function accounts for by checking and ensuring a Costco visit if it hasn't been made during the route construction.
+During each iteration, the function evaluates potential next stops by comparing travel times from the current location to unvisited stores. It selects the location with the shortest travel time that adheres to the maximum allowed time constraint. If no suitable next stop is found, the function breaks the loop, signaling the end of route construction. Additionally, if no Costco has been visited by the end of the route, the function finds and includes the nearest unvisited Costco. Finally, the route concludes by returning to the depot, ensuring a complete round trip.
+The output of the function includes the sequence of store visits (route) and the total travel time. By converting route indices back to store names, I generated and printed the first optimized route along with the total travel time in hours and the number of locations visited. This method effectively utilizes the time matrix to create a route that maximizes delivery efficiency while adhering to time constraints and ensuring critical delivery requirements are met, such as the frequent restocking of Costco. I used similar methods for all the other routes.
+Due to the fact that the two main routes (route 1 and route 2) do not cover all the stores, I created more routes: route1_1, route1_2, route2_1, route2_2. Route 1 and route 2 will be driven on Monday by Driver A and B, respectively. Tuesday, Route1_1 and route1_2 will be deployed by the two drivers, then route1_2 and route2_2 will be deployed the next day, and the cycle will continue. This ensures that all stores are being delivered to at least 3x a week, Costcos are being delivered to 5x a week, and drivers do not share any stores. This resulted in a 65% increase in delivery frequency. 
+
+
+
+
+
+
+
+
+
